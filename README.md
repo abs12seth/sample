@@ -1,4 +1,4 @@
-# co_win
+# Sample app
 
 A new Flutter application.
 
