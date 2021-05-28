@@ -30,7 +30,7 @@ class SecondState extends State<SecondScreen> {
                         borderRadius: BorderRadius.circular(50.0)
                     ),
                   child: Center(
-                    child: Text("Sample",style: TextStyle(fontSize: 30.0,color: Colors.white),),
+                    child: Text("Sample",style: TextStyle(fontSize: 20.0,color: Colors.white),),
                   )
 
                 ),
@@ -48,8 +48,40 @@ class SecondState extends State<SecondScreen> {
                     hintText: 'Enter a email ID',
                   ),
                 ),
-            )
-            
+            ),
+            Padding(padding: EdgeInsets.only(left: 15,right: 15,top: 15,bottom: 0),
+                child: TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 1.0),
+                    ),
+                    labelText: 'Password',
+                    hintText: 'Enter your Password'
+                  ),
+                ),
+            ),
+            FlatButton(
+                onPressed: (){
+                  print("its happening");
+                  // Will make another class
+                },
+                child: Text("Forgot Password",style: TextStyle(color: Colors.blue,fontSize: 15.0),
+                ),
+            ),
+            Container(
+              height: 50,
+              width: 200,
+              decoration: BoxDecoration(
+                color: Colors.teal,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: FlatButton(onPressed: (){
+                print("Logging in");
+              },
+                child: Text('Login'),
+              ),
+            ),
           ],
         ),
       )
