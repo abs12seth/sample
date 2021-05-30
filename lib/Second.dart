@@ -1,3 +1,4 @@
+import 'package:co_win/createaccount.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -81,6 +82,20 @@ class SecondState extends State<SecondScreen> {
               },
                 child: Text('Login'),
               ),
+            ),
+            Padding(padding: EdgeInsets.all(25.0),
+                child: Container(
+                  alignment: Alignment.bottomCenter ,
+                  child: Row(
+                    children: [
+                      Text('New User?',style: TextStyle(fontSize: 15.0),),
+                      FlatButton(onPressed: (){
+                        Navigator.pushNamed(context, '/create');
+                      },
+                        child: Text('Create Account',style: TextStyle(color: Colors.blue,fontSize: 15.0),),),
+                    ],
+                  ),
+                ),
             ),
           ],
         ),

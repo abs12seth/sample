@@ -1,4 +1,5 @@
 import 'package:co_win/Second.dart';
+import 'package:co_win/createaccount.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget{
       routes: {
         '/':(context) => FirstScreen(),
         '/second':(context) => SecondScreen(),
+        '/create':(context) => CreateAccount(),
       },
     );
   }
