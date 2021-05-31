@@ -38,7 +38,7 @@ class SecondState extends State<SecondScreen> {
                       width: 200,
                       height: 150,
                       decoration: BoxDecoration(
-                          color: Colors.teal,
+                          color: Color.fromRGBO(61, 169, 142, 50),
                           borderRadius: BorderRadius.circular(50.0)),
                       child: Center(
                         child: Text(
@@ -113,18 +113,25 @@ class SecondState extends State<SecondScreen> {
                       print("Not null");
                     }
                   },
-                  child: Text('Login'),
+                  child: Text(
+                    'LOGIN',
+                    style: TextStyle(
+                        color: Color.fromRGBO(0, 43, 43, 100),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Rubik'),
+                  ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(25.0),
+                padding: EdgeInsets.only(top: 60.0),
                 child: Container(
                   alignment: Alignment.bottomCenter,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'New User?',
+                        'First Time User?',
                         style: TextStyle(fontSize: 15.0),
                       ),
                       FlatButton(
