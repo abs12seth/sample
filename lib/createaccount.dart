@@ -163,7 +163,7 @@ class CreateState extends State<CreateAccount>{
                     phone_no: mobile.text,
                     email: email.text,
                     password: password.text,
-                    confirm_password: con_password.text,
+
                   );
                   User user = new User();
                 },
@@ -175,6 +175,7 @@ class CreateState extends State<CreateAccount>{
       ),
     );
   }
+
   void passwordVis() {
     setState(() {
       isHidden = !isHidden;

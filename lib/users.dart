@@ -1,59 +1,44 @@
-import 'dart:async';
-
-import 'package:flutter/widgets.dart';
-
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
-
-void main() async {
-  final database = openDatabase(
-    join(await getDatabasesPath(), 'user_database.db'),
-    onCreate: (db, version) {
-      return db.execute(
-        "CREATE TABLE users(name TEXT, user_name TEXT, phone_no TEXT, email TEXT, password TEXT, confirm_password TEXT)",
-      );
-    },
-    version: 1,
-  );
-  Future<void> insertUser(User user) async {
-    final Database db = await database;
-    await db.insert('users', user.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
-  }
-
-
-
-}
 
 class User {
-  final String name;
-  final String user_name;
-  final String phone_no;
-  final String email;
-  final String password;
-  final String confirm_password;
+  String name;
+  String user_name;
+  String phone_no;
+  String email;
+  String password;
 
   User(
       {this.name,
       this.user_name,
       this.phone_no,
       this.email,
-      this.password,
-      this.confirm_password});
+      this.password,});
+  User.fromMap(dynamic obj){
+    this.name = obj['name'];
+    this.user_name = obj['username'];
+    this.phone_no = obj['mobile'];
+    this.email = obj['email'];
+    this.password = obj['password'];
+  }
+
+  String get _name => name;
+  String get _username => user_name;
+  String get _mobile => phone_no;
+  String get _email => email;
+  String get _password => password;
+
 
   Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'user_name': user_name,
-      'phone_no': phone_no,
-      'email': email,
-      'password': password,
-      'confirm_password': confirm_password,
-    };
+    var map = new Map<String, dynamic>();
+      map['name'] =  name;
+      map['user_name'] =  user_name;
+      map['phone_no'] = phone_no;
+      map['email'] = email;
+      map['password'] = password;
+      return map;
   }
 
   @override
   String toString() {
-    return 'User{name: $name,user_name: $user_name,phone_no: $phone_no,email: $email, password: $password,confirm_password: $confirm_password}';
+    return 'User{name: $name,user_name: $user_name,phone_no: $phone_no,email: $email, password: $password}';
   }
 }
