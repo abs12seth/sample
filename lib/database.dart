@@ -6,16 +6,19 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-void main() async{
-  final database = openDatabase(
+class Login{
+  static Database database;
+  Future<Database> get db async {
+    openDatabase(
       join(await getDatabasesPath(), 'user_database.db'),
       onCreate: (db, version) {
-  return db.execute(
-  "CREATE TABLE users(name TEXT, user_name TEXT, phone_no TEXT, email TEXT, password TEXT, confirm_password TEXT)",
-  );
-  },
-  version: 1,
-  );
+        return db.execute(
+          "CREATE TABLE users(name TEXT, user_name TEXT, phone_no TEXT, email TEXT, password TEXT, confirm_password TEXT)",
+        );
+      },
+      version: 1,
+    );
+  }
   Future<int> insertUser(User user) async {
     final Database db = await database;
     int res = await db.insert('users', user.toMap(),
@@ -29,9 +32,19 @@ void main() async{
     return res;
   }
 
-  Future<List<User>> getAlluser() async {
+  Future<User> getLogin(String user,String password) async{
     final Database db = await database;
-    var res = await db.query('users'); 
+    var res = await db.rawQuery("SELECT * FROM user WHERE username = '$user' and password = '$password'");
+    if(res.length > 0) {
+      return new User.fromMap(res.first);
+    }
+    return null;
   }
 
+  Future<List<User>> getAlluser() async {
+    final Database db = await database;
+    var res = await db.query('users');
+    List<User> list = res.isNotEmpty ? res.map((c) => User.fromMap(c)).toList() : null;
+    return list;
+  }
 }
