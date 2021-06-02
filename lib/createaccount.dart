@@ -1,3 +1,4 @@
+import 'package:co_win/database.dart';
 import 'package:co_win/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -157,7 +158,9 @@ class CreateState extends State<CreateAccount>{
               ),
               child: FlatButton(
                 onPressed: () {
-                  final acc = User(
+                  User user = new User();
+                  Login login = new Login();
+                  User acc = new User(
                     name: name.text,
                     user_name: user_name.text,
                     phone_no: mobile.text,
@@ -165,7 +168,9 @@ class CreateState extends State<CreateAccount>{
                     password: password.text,
 
                   );
-                  User user = new User();
+                  print(acc.name);
+                  print(login.insertUser(acc));
+                  print(login.getAlluser());
                 },
                 child: Text('Register'),
               ),

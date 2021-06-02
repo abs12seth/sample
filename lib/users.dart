@@ -28,13 +28,14 @@ class User {
 
 
   Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
-      map['name'] =  name;
-      map['user_name'] =  user_name;
-      map['phone_no'] = phone_no;
-      map['email'] = email;
-      map['password'] = password;
-      return map;
+    print(name);
+    return {
+      'name': name,
+      'user_name': user_name,
+      'phone_no':phone_no,
+      'email':email,
+      'password':password,
+    };
   }
 
   @override

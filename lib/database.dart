@@ -13,16 +13,14 @@ class Login{
       join(await getDatabasesPath(), 'user_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          "CREATE TABLE users(name TEXT, user_name TEXT, phone_no TEXT, email TEXT, password TEXT, confirm_password TEXT)",
+          "CREATE TABLE users(""name TEXT, ""user_name TEXT, ""phone_no TEXT, ""email TEXT, ""password TEXT"")",
         );
       },
       version: 1,
     );
   }
   Future<int> insertUser(User user) async {
-    final Database db = await database;
-    int res = await db.insert('users', user.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    int res = await database.insert('users', user.toMap());
     return res;
   }
 
@@ -42,8 +40,7 @@ class Login{
   }
 
   Future<List<User>> getAlluser() async {
-    final Database db = await database;
-    var res = await db.query('users');
+    var res = await database.query('users');
     List<User> list = res.isNotEmpty ? res.map((c) => User.fromMap(c)).toList() : null;
     return list;
   }
