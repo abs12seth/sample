@@ -1,4 +1,5 @@
 import 'package:co_win/database.dart';
+import 'package:co_win/databaseapp.dart';
 import 'package:co_win/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -159,18 +160,18 @@ class CreateState extends State<CreateAccount>{
               child: FlatButton(
                 onPressed: () {
                   User user = new User();
-                  Login login = new Login();
-                  User acc = new User(
-                    name: name.text,
-                    user_name: user_name.text,
-                    phone_no: mobile.text,
-                    email: email.text,
-                    password: password.text,
-
-                  );
-                  print(acc.name);
-                  print(login.insertUser(acc));
-                  print(login.getAlluser());
+                  LoginApp login = new LoginApp();
+                  user.name = name.text;
+                  user.user_name = user_name.text;
+                  user.phone_no = mobile.text;
+                  user.email = email.text;
+                  user.password = password.text;
+                  var a = login.insertUser(user);
+                  var l = login.getAlluser();
+                  print(l);
+                  //print(user.name);
+                  //print(login.insertUser(user));
+                  //print(login.getAlluser());
                 },
                 child: Text('Register'),
               ),

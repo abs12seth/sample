@@ -28,7 +28,7 @@ class User {
 
 
   Map<String, dynamic> toMap() {
-    print(name);
+    //print(name);
     return {
       'name': name,
       'user_name': user_name,
