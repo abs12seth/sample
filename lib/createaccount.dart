@@ -1,8 +1,11 @@
+
+
 import 'package:co_win/database.dart';
 import 'package:co_win/databaseapp.dart';
 import 'package:co_win/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class CreateAccount extends StatefulWidget{
   @override
@@ -14,6 +17,7 @@ class CreateAccount extends StatefulWidget{
 class CreateState extends State<CreateAccount>{
   bool isHidden = true;
   bool _isHiiden = true;
+  final _formkey = GlobalKey<FormState>();
   final name = TextEditingController();
   final user_name = TextEditingController();
   final mobile = TextEditingController();
@@ -27,12 +31,14 @@ class CreateState extends State<CreateAccount>{
     return Scaffold(
       backgroundColor: Color.fromRGBO(197, 234, 225, 50),
       body: SingleChildScrollView(
+        child: Form(
+          key: _formkey,
+          autovalidateMode: AutovalidateMode.always,
         child: Column(
           children: <Widget>[
             Padding(padding: const EdgeInsets.only(top: 60.0),
               child: Center(
                 child: Container(
-
                     width: 200,
                     height: 150,
                     decoration: BoxDecoration(
@@ -54,7 +60,13 @@ class CreateState extends State<CreateAccount>{
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(padding: EdgeInsets.only(left: 15,right: 15, top: 10,bottom: 0.0),
-                        child: TextField(
+                        child: TextFormField(
+                          validator: (value){
+                            if(value == null || value.isEmpty){
+                              return 'Please enter a name';
+                            }
+                            return null;
+                          },
                           controller: name,
                           decoration: InputDecoration(
                             border:OutlineInputBorder(
@@ -62,24 +74,19 @@ class CreateState extends State<CreateAccount>{
                             ),
                             labelText: 'Full Name',
                             hintText: 'e.g. - Abhishek Seth',
+                            helperText: "",
                           ),
                         ),
                       ),
                       Padding(padding: EdgeInsets.only(left: 15,right: 15,top: 15,bottom: 0),
-                        child: TextField(
-                          controller: user_name,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              labelText: 'UserID',
-                              hintText: 'e.g., absseth12'
-                          ),
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 15,right: 15,top: 15,bottom: 0),
-                        child: TextField(
+                        child: TextFormField(
                           controller: mobile,
+                          validator: MultiValidator([
+                            RequiredValidator(errorText: "* Required"),
+                            MinLengthValidator(10, errorText: "Phone no. should be of 10 digits"),
+                            MaxLengthValidator(10, errorText: "Phone no. should be of 10 digits"),
+                            //PatternValidator(r'(@"^\d{10}$")', errorText: "Enter a valid phone number")
+                          ]),
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
@@ -90,7 +97,12 @@ class CreateState extends State<CreateAccount>{
                         ),
                       ),
                       Padding(padding: EdgeInsets.only(left: 15,right: 15,top: 15,bottom: 0),
-                        child: TextField(
+                        child: TextFormField(
+                          autovalidateMode: AutovalidateMode.always,
+                          validator: MultiValidator([
+                            RequiredValidator(errorText: "* Required"),
+                            EmailValidator(errorText: "Please enter a valid email address")
+                          ]),
                           controller: email,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -102,8 +114,12 @@ class CreateState extends State<CreateAccount>{
                         ),
                       ),
                       Padding(padding: EdgeInsets.only(left: 15,right: 15,top: 15,bottom: 0),
-                        child: TextField(
+                        child: TextFormField(
                           controller: password,
+                          validator: MultiValidator([
+                            RequiredValidator(errorText: "* Required"),
+                            MinLengthValidator(8, errorText: "Password length should be at least 8"),
+                          ]),
                           obscureText: _isHiiden,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -123,10 +139,20 @@ class CreateState extends State<CreateAccount>{
                             ),
                           ),
                         ),
+
                       ),
                       Padding(padding: EdgeInsets.only(left: 15,right: 15,top: 15,bottom: 10),
-                        child: TextField(
+                        child: TextFormField(
                           controller: con_password,
+                          validator: (value){
+                            if(value.isEmpty){
+                              return "* Required";
+                            }
+                            if(password.text != con_password.text){
+                              return "Password doesn't match";
+                            }
+                            return null;
+                          },
                           obscureText: isHidden,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -159,16 +185,22 @@ class CreateState extends State<CreateAccount>{
               ),
               child: FlatButton(
                 onPressed: () {
-                  User user = new User();
-                  LoginApp login = new LoginApp();
-                  user.name = name.text;
-                  user.user_name = user_name.text;
-                  user.phone_no = mobile.text;
-                  user.email = email.text;
-                  user.password = password.text;
-                  var a = login.insertUser(user);
-                  var l = login.getAlluser();
-                  print(l);
+                  if(_formkey.currentState.validate()){
+                    print("Validated");
+                    User user = new User();
+                    LoginApp login = new LoginApp();
+                    user.name = name.text;
+                    user.phone_no = mobile.text;
+                    user.email = email.text;
+                    user.password = password.text;
+                    //var c = login.deleteUser(user);
+                    var a = login.insertUser(user);
+                    var l = login.getAlluser();
+
+                  }
+                  else{
+                    print("Not validated");
+                  }
                   //print(user.name);
                   //print(login.insertUser(user));
                   //print(login.getAlluser());
@@ -177,6 +209,7 @@ class CreateState extends State<CreateAccount>{
               ),
             ),
           ],
+        ),
         ),
       ),
     );
@@ -188,3 +221,5 @@ class CreateState extends State<CreateAccount>{
     });
   }
 }
+
+//r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'

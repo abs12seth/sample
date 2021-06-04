@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  form_field_validator: any
   flutter:
     sdk: flutter
   sqflite: any

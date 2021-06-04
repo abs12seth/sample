@@ -19,7 +19,7 @@ class LoginApp{
 
   Future<int> deleteUser(User user) async {
     var db = await log.db;
-    int res = await db.delete('users',where: 'user_name = ?',whereArgs: [user.user_name]);
+    int res = await db.delete('users');
     return res;
   }
 

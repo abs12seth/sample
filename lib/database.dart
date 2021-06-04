@@ -41,7 +41,7 @@ class Login{
     //await new File(path).writeAsBytes(bytes);
 
     var ourDb = await openDatabase(path,onCreate: (db,version){db.execute(
-        "CREATE TABLE users(name TEXT, user_name TEXT, phone_no TEXT, email TEXT, password TEXT)");
+        "CREATE TABLE users(name TEXT, phone_no TEXT, email TEXT, password TEXT)");
     },
       version: 1,
     );
