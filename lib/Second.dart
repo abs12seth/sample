@@ -1,8 +1,13 @@
 import 'dart:ui';
 
 import 'package:co_win/createaccount.dart';
+import 'package:co_win/database.dart';
+import 'package:co_win/login_response.dart';
+import 'package:co_win/users.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SecondScreen extends StatefulWidget {
   @override
@@ -10,11 +15,20 @@ class SecondScreen extends StatefulWidget {
     return SecondState();
   }
 }
-
-class SecondState extends State<SecondScreen> {
+enum LoginStatus {notSignIn, signIn}
+class SecondState extends State<SecondScreen> implements LoginCallBack{
+  LoginStatus _loginStatus = LoginStatus.notSignIn;
+  BuildContext _buildContext;
+  bool isLoading = false;
+  String _email,_password;
+  LoginResponse _loginResponse;
+  SecondState() {
+    _loginResponse = new LoginResponse(this);
+  }
   bool isHidden = true;
   final emailController = TextEditingController();
   final passController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
     emailController.dispose();
@@ -48,39 +62,58 @@ class SecondState extends State<SecondScreen> {
                       )),
                 ),
               ),
-              Padding(
-                padding:
-                    EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 0.0),
-                child: TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+              Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 15, right: 15, top: 5, bottom: 0.0),
+                      child: TextFormField(
+                        onSaved: (val) => _email = val,
+                        controller: emailController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: "* Required"),
+                          EmailValidator(errorText: "Enter valid email ID"),
+                        ]),
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            labelText: 'Email',
+                            hintText: 'Enter a email',
+                            suffixIcon: Icon(Icons.account_circle)),
                       ),
-                      labelText: 'Email',
-                      hintText: 'Enter a email ID or UserID',
-                      suffixIcon: Icon(Icons.account_circle)),
-                ),
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 0),
-                child: TextField(
-                  controller: passController,
-                  obscureText: isHidden,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
                     ),
-                    labelText: 'Password',
-                    hintText: 'Enter your Password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        isHidden ? Icons.visibility : Icons.visibility_off,
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 15, right: 15, top: 15, bottom: 0),
+                      child: TextFormField(
+                        onSaved: (val) => _password = val,
+                        controller: passController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: "* Required"),
+                        ]),
+                        obscureText: isHidden,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          labelText: 'Password',
+                          hintText: 'Enter your Password',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              isHidden
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: passwordVis,
+                          ),
+                        ),
                       ),
-                      onPressed: passwordVis,
                     ),
-                  ),
+                  ],
                 ),
               ),
               TextButton(
@@ -99,8 +132,14 @@ class SecondState extends State<SecondScreen> {
                 ),
                 child: FlatButton(
                   onPressed: () {
-                    if (emailController.text == '' ||
-                        passController.text == '') {
+                    final form = _formKey.currentState;
+                    if (form.validate()) {
+                      setState(() {
+                        isLoading = true;
+                        form.save();
+                        _loginResponse.doLogin(_email, _password);
+                      });
+                    } else {
                       showDialog(
                         context: context,
                         builder: (context) {
@@ -109,8 +148,6 @@ class SecondState extends State<SecondScreen> {
                           );
                         },
                       );
-                    } else {
-                      print("Not null");
                     }
                   },
                   child: Text(
@@ -150,6 +187,65 @@ class SecondState extends State<SecondScreen> {
             ],
           ),
         ));
+  }
+
+  savePref(int value, String user, String pass) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setInt("value", value);
+      preferences.setString("user", user);
+      preferences.setString("pass", pass);
+      preferences.commit();
+    });
+  }
+
+  var value;
+  getPref() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      value = preferences.getInt("value");
+      _loginStatus = value == 1 ? LoginStatus.signIn : LoginStatus.notSignIn;
+    });
+  }
+
+  signOut() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setInt("value", null);
+      preferences.commit();
+      _loginStatus = LoginStatus.notSignIn;
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    getPref();
+  }
+
+  void _showSnackBar(String s){
+
+  }
+
+  @override
+  void onLoginError(String error){
+    _showSnackBar(error);
+    setState(() {
+      isLoading = false;
+    });
+  }
+  @override
+  void onLoginSuccess(User user) async {
+    if(user != null){
+      savePref(1, user.email, user.password);
+      _loginStatus = LoginStatus.signIn;
+    }
+    else{
+      _showSnackBar("User not Found");
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void passwordVis() {
