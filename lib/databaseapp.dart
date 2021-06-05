@@ -25,7 +25,8 @@ class LoginApp{
 
   Future<User> getLogin(String user,String password) async{
     var db = await log.db;
-    var res = await db.rawQuery("SELECT * FROM user WHERE username = '$user' and password = '$password'");
+    var res = await db.rawQuery("SELECT * FROM users WHERE email = '$user' and password = '$password'");
+    print(res);
     if(res.length > 0) {
       return new User.fromMap(res.first);
     }

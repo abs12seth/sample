@@ -1,5 +1,6 @@
 import 'package:co_win/Second.dart';
 import 'package:co_win/createaccount.dart';
+import 'package:co_win/homescreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => FirstScreen(),
         '/second': (context) => SecondScreen(),
         '/create': (context) => CreateAccount(),
+        '/main': (context) => HomeScreen(),
       },
     );
   }
