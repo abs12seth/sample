@@ -42,157 +42,149 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
 
   @override
   Widget build(BuildContext context) {
-    switch (_loginStatus) {
-      case LoginStatus.notSignIn:
-        // TODO: implement build
-        return Scaffold(
-            backgroundColor: Color.fromRGBO(197, 234, 225, 40),
-            body: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 60.0),
-                    child: Center(
-                      child: Container(
-                          width: 200,
-                          height: 150,
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(61, 169, 142, 50),
-                              borderRadius: BorderRadius.circular(50.0)),
-                          child: Center(
-                            child: Text(
-                              "Sample",
-                              style: TextStyle(
-                                  fontSize: 20.0, color: Colors.white),
-                            ),
-                          )),
-                    ),
-                  ),
-                  Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 15, right: 15, top: 5, bottom: 0.0),
-                          child: TextFormField(
-                            onSaved: (val) => _email = val,
-                            controller: emailController,
-                            validator: MultiValidator([
-                              RequiredValidator(errorText: "* Required"),
-                              EmailValidator(errorText: "Enter valid email ID"),
-                            ]),
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                labelText: 'Email',
-                                hintText: 'Enter a email',
-                                suffixIcon: Icon(Icons.account_circle)),
-                          ),
+    // TODO: implement build
+    return Scaffold(
+        backgroundColor: Color.fromRGBO(197, 234, 225, 40),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 60.0),
+                child: Center(
+                  child: Container(
+                      width: 200,
+                      height: 150,
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(61, 169, 142, 50),
+                          borderRadius: BorderRadius.circular(50.0)),
+                      child: Center(
+                        child: Text(
+                          "Sample",
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 15, right: 15, top: 15, bottom: 0),
-                          child: TextFormField(
-                            onSaved: (val) => _password = val,
-                            controller: passController,
-                            validator: MultiValidator([
-                              RequiredValidator(errorText: "* Required"),
-                            ]),
-                            obscureText: isHidden,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              labelText: 'Password',
-                              hintText: 'Enter your Password',
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  isHidden
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed: passwordVis,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Forgot Password",
-                      style: TextStyle(fontSize: 15.0),
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(61, 169, 142, 50),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        final form = _formKey.currentState;
-                        if (form.validate()) {
-                          setState(() {
-                            isLoading = true;
-                            form.save();
-                            _loginResponse.doLogin(_email, _password);
-                          });
-                        }
-                      },
-                      child: Text(
-                        'LOGIN',
-                        style: TextStyle(
-                            color: Color.fromRGBO(0, 43, 43, 100),
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Rubik'),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 60.0),
-                    child: Container(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'First Time User?',
-                            style: TextStyle(fontSize: 15.0),
-                          ),
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/create');
-                            },
-                            child: Text(
-                              'Create Account',
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 15.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                      )),
+                ),
               ),
-            ));
-        break;
-      case LoginStatus.signIn:
-        Navigator.pushNamed(context, '/main');
-        break;
-    }
+              Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 15, right: 15, top: 5, bottom: 0.0),
+                      child: TextFormField(
+                        onSaved: (val) => _email = val,
+                        controller: emailController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: "* Required"),
+                          EmailValidator(errorText: "Enter valid email ID"),
+                        ]),
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            labelText: 'Email',
+                            hintText: 'Enter a email',
+                            suffixIcon: Icon(Icons.account_circle)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 15, right: 15, top: 15, bottom: 0),
+                      child: TextFormField(
+                        onSaved: (val) => _password = val,
+                        controller: passController,
+                        validator: MultiValidator([
+                          RequiredValidator(errorText: "* Required"),
+                        ]),
+                        obscureText: isHidden,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          labelText: 'Password',
+                          hintText: 'Enter your Password',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              isHidden
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: passwordVis,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Forgot Password",
+                  style: TextStyle(fontSize: 15.0),
+                ),
+              ),
+              Container(
+                height: 50,
+                width: 200,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(61, 169, 142, 50),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: FlatButton(
+                  onPressed: () {
+                    final form = _formKey.currentState;
+                    if (form.validate()) {
+                      setState(() {
+                        isLoading = true;
+                        form.save();
+                        _loginResponse.doLogin(_email, _password);
+                      });
+                    }
+                  },
+                  child: Text(
+                    'LOGIN',
+                    style: TextStyle(
+                        color: Color.fromRGBO(0, 43, 43, 100),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Rubik'),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 60.0),
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'First Time User?',
+                        style: TextStyle(fontSize: 15.0),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/create');
+                        },
+                        child: Text(
+                          'Create Account',
+                          style: TextStyle(color: Colors.blue, fontSize: 15.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   savePref(int value, String user, String pass) async {
+    WidgetsFlutterBinding.ensureInitialized();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt("value", value);
@@ -250,6 +242,7 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
     if (user != null) {
       savePref(1, user.email, user.password);
       _loginStatus = LoginStatus.signIn;
+      Navigator.pushNamed(context, '/main');
     } else {
       _showSnackBar("User not Found");
       setState(() {

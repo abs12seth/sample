@@ -196,7 +196,7 @@ class CreateState extends State<CreateAccount>{
                     //var c = login.deleteUser(user);
                     var a = login.insertUser(user);
                     var l = login.getAlluser();
-
+                    Navigator.pushNamed(context, '/second');
                   }
                   else{
                     print("Not validated");
