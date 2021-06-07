@@ -3,6 +3,7 @@ import 'package:co_win/createaccount.dart';
 import 'package:co_win/homescreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,8 +26,10 @@ class MyApp extends StatelessWidget {
 }
 
 class FirstScreen extends StatelessWidget {
+  BuildContext _buildContext;
   @override
   Widget build(BuildContext context) {
+    _buildContext = context;
     return Container(
       alignment: Alignment.center,
       color: Color.fromRGBO(197, 234, 225, 40),
@@ -60,11 +63,20 @@ class FirstScreen extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/second');
+                var res = next();
               },
               child: Text("Continue >")),
         ],
       ),
     );
+  }
+  Future next() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if(preferences.get("value") != null){
+      Navigator.pushNamed(_buildContext, '/main');
+    }
+    else{
+      Navigator.pushNamed(_buildContext, '/second');
+    }
   }
 }
