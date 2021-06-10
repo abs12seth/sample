@@ -6,14 +6,26 @@ class LoginApp{
 
   Login log = new Login();
 
-  Future<int> insertUser(User user) async {
+  Future<bool> insertUser(User user) async {
     var db = await log.db;
+    bool ret = false;
     if(db == null){
       print("it is null");
     }
     else {
-      int res = await db.insert('users', user.toMap());
-      return res;
+      bool result = await checkforUser(user.email);
+      print(result);
+      if(!result){
+        int res = await db.insert('users', user.toMap());
+        print("inserted");
+        ret = true;
+        return ret;
+      }
+      else {
+        print("not inserted");
+        ret = false;
+        return ret;
+      }
     }
   }
 
@@ -21,6 +33,20 @@ class LoginApp{
     var db = await log.db;
     int res = await db.delete('users');
     return res;
+  }
+
+  Future<bool> checkforUser(String user) async{
+    var db = await log.db;
+    var res = await db.rawQuery("SELECT * FROM users WHERE email = '$user'");
+    bool isCheck = false;
+    if(res.length > 0){
+      isCheck =  true;
+    }
+    else{
+      isCheck = false;
+    }
+    print(isCheck);
+    return isCheck;
   }
 
   Future<User> getLogin(String user,String password) async{

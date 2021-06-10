@@ -1,5 +1,3 @@
-
-
 import 'package:co_win/database.dart';
 import 'package:co_win/databaseapp.dart';
 import 'package:co_win/users.dart';
@@ -187,16 +185,7 @@ class CreateState extends State<CreateAccount>{
                 onPressed: () {
                   if(_formkey.currentState.validate()){
                     print("Validated");
-                    User user = new User();
-                    LoginApp login = new LoginApp();
-                    user.name = name.text;
-                    user.phone_no = mobile.text;
-                    user.email = email.text;
-                    user.password = password.text;
-                    //var c = login.deleteUser(user);
-                    var a = login.insertUser(user);
-                    var l = login.getAlluser();
-                    Navigator.pushNamed(context, '/second');
+                    check();
                   }
                   else{
                     print("Not validated");
@@ -219,6 +208,40 @@ class CreateState extends State<CreateAccount>{
     setState(() {
       isHidden = !isHidden;
     });
+  }
+  Future<void> check() async{
+    User user = new User();
+    LoginApp login = new LoginApp();
+    user.name = name.text;
+    user.phone_no = mobile.text;
+    user.email = email.text;
+    user.password = password.text;
+    //var c = login.deleteUser(user);
+    bool a = await login.insertUser(user);
+    var l = login.getAlluser();
+    if(a){
+      showDialog(
+          context: context,
+          builder: (context){
+            return AlertDialog(
+              content: Text("You are registered"),
+            );
+          });
+    }
+    else{
+      showDialog(
+          context: context,
+          builder: (context){
+            return AlertDialog(
+              content: Text("You are already registered!!\nPlease visit login page\nThank you!"),
+            );
+          });
+    }
+    Future.delayed(
+        Duration (seconds: 2),() {
+      Navigator.pushNamed(context, '/second');
+    }
+    );
   }
 }
 

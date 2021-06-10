@@ -220,7 +220,7 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
 
   void _showSnackBar(String s) {
     showDialog(
-      context: context,
+      context: _buildContext,
       builder: (context) {
         return AlertDialog(
           content: Text(s),
