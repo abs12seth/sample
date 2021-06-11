@@ -32,13 +32,7 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  @override
-  void dispose() {
-    emailController.dispose();
-    super.dispose();
-    passController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +236,7 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
     if (user != null) {
       savePref(1, user.email, user.password);
       _loginStatus = LoginStatus.signIn;
-      Navigator.pushNamed(context, '/main');
+      Navigator.pushReplacementNamed(context, '/main');
     } else {
       _showSnackBar("User not Found");
       setState(() {

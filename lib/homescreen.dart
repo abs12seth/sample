@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 import 'package:co_win/Second.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +16,33 @@ class HomeState extends State<HomeScreen>{
   Widget build(BuildContext context) {
     SecondState ss = new SecondState();
     return Scaffold(
-      appBar: AppBar(title: Text("Main"),),
+      appBar: AppBar(title: Text("Main"),
+      actions: <Widget>[
+        IconButton(icon: Icon(
+          Icons.more_vert_rounded,
+          color: Colors.white,
+        ), onPressed: (){
+          ListTile(
+            title: Text("Sign Out"),
+          );
+        })
+      ],),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(child: Text("Hello"),
+            decoration: BoxDecoration(
+              color: Colors.cyan,
+            ),
+            ),
+            ListTile(
+              title: Text("SignOut"),
+              onTap: signOut,
+            ),
+          ],
+        ),
+      ),
       body: Center(
         child: RaisedButton(
           onPressed: ()async{
@@ -31,6 +56,14 @@ class HomeState extends State<HomeScreen>{
         ),
       ),
     );
+  }
+
+  void signOut() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.remove("value");
+    preferences.remove("user");
+
+    Navigator.pushReplacementNamed(context, '/second');
   }
 
 }

@@ -30,6 +30,11 @@ class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _buildContext = context;
+    Future.delayed(
+      Duration(seconds: 3), (){
+      next();
+    },
+    );
     return Container(
       alignment: Alignment.center,
       color: Color.fromRGBO(197, 234, 225, 40),
@@ -58,14 +63,16 @@ class FirstScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Rubik')),
                 ],
+
               ),
             ),
           ),
-          ElevatedButton(
+
+          /*ElevatedButton(
               onPressed: () {
                 var res = next();
               },
-              child: Text("Continue >")),
+              child: Text("Continue >")),*/
         ],
       ),
     );
@@ -73,10 +80,10 @@ class FirstScreen extends StatelessWidget {
   Future next() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if(preferences.get("value") != null){
-      Navigator.pushNamed(_buildContext, '/main');
+      Navigator.pushReplacementNamed(_buildContext, '/main');
     }
     else{
-      Navigator.pushNamed(_buildContext, '/second');
+      Navigator.pushReplacementNamed(_buildContext, '/second');
     }
   }
 }
