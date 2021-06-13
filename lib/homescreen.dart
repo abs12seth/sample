@@ -3,6 +3,7 @@ import 'package:co_win/Second.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -12,6 +13,12 @@ class HomeScreen extends StatefulWidget{
 }
 
 class HomeState extends State<HomeScreen>{
+  GoogleMapController mapController;
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+  void _onMapController(GoogleMapController controller){
+    mapController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
     SecondState ss = new SecondState();
@@ -45,12 +52,10 @@ class HomeState extends State<HomeScreen>{
       ),
       body: Center(
         child: RaisedButton(
-          onPressed: ()async{
-            SharedPreferences preferences = await SharedPreferences.getInstance();
-            preferences.remove("value");
-            preferences.remove("user");
-
-            Navigator.pushNamed(context, '/second');
+          onPressed: (){
+            GoogleMap(
+              
+            );
           },
           child: Text("Sign Out"),
         ),
