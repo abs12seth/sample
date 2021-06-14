@@ -54,7 +54,11 @@ class HomeState extends State<HomeScreen>{
         child: RaisedButton(
           onPressed: (){
             GoogleMap(
-              
+              onMapCreated: _onMapController,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 11.0,
+              ),
             );
           },
           child: Text("Sign Out"),
