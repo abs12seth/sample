@@ -1,9 +1,18 @@
+import 'dart:html';
 import 'dart:ui';
 import 'package:co_win/Second.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:location/location.dart' as LocationManager;
+import 'package:intl/intl.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+const apikey = "AIzaSyDHoIRdbk8vfGlaHLkdUxh2XWGR8pMgrto";
+GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: apikey);
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -13,10 +22,33 @@ class HomeScreen extends StatefulWidget{
 }
 
 class HomeState extends State<HomeScreen>{
+  //LocationManager.LocationData currentLocation;
+  //LocationManager.Location loc = LocationManager.Location();
+  String address,date;
   GoogleMapController mapController;
-  final LatLng _center = const LatLng(45.521563, -122.677433);
-  void _onMapController(GoogleMapController controller){
+  Marker marker;
+  bool isLoading = false;
+  String errorMsg;
+  List<PlacesSearchResult> places = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserLocation();
+  }
+
+  void _onMapCreated(GoogleMapController controller){
     mapController = controller;
+    /*loc.onLocationChanged.listen((l) {
+      mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+      CameraPosition(target: LatLng(
+        l.latitude,l.longitude
+      ),zoom: 15),
+      ),
+      );
+    });*/
   }
 
   @override
@@ -25,14 +57,18 @@ class HomeState extends State<HomeScreen>{
     return Scaffold(
       appBar: AppBar(title: Text("Main"),
       actions: <Widget>[
-        IconButton(icon: Icon(
-          Icons.more_vert_rounded,
-          color: Colors.white,
-        ), onPressed: (){
-          ListTile(
-            title: Text("Sign Out"),
-          );
-        })
+        isLoading ?
+            IconButton(icon: Icon(Icons.timer), onPressed: (){},)
+            : IconButton(icon: Icon(Icons.refresh),
+            onPressed:(){
+              refresh();
+            }
+        ),
+        IconButton(icon: Icon(Icons.search),
+            onPressed: (){
+             // _handlePressButton();
+            }
+        ),
       ],),
       drawer: Drawer(
         child: ListView(
@@ -50,20 +86,13 @@ class HomeState extends State<HomeScreen>{
           ],
         ),
       ),
-      body: Center(
-        child: RaisedButton(
-          onPressed: (){
-            GoogleMap(
-              onMapCreated: _onMapController,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 11.0,
-              ),
-            );
-          },
-          child: Text("Sign Out"),
+      body: Column(
+        children: [
+          Container(
+
+          ),
+        ],
         ),
-      ),
     );
   }
 
@@ -74,5 +103,37 @@ class HomeState extends State<HomeScreen>{
 
     Navigator.pushReplacementNamed(context, '/second');
   }
+
+  void refresh() async{
+    final center = await getUserLocation();
+    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: center == null ? LatLng(0, 0) : center, zoom: 15.0)));
+  }
+
+  Future<LatLng> getUserLocation() async{
+    var currentLocation = <String, double>{};
+    final location = LocationManager.Location();
+    try{
+      currentLocation = (await location.getLocation()) as Map<String, double>;
+      final lat = currentLocation["latitude"];
+      final lang = currentLocation["longitude"];
+      final center = LatLng(lat, lang);
+      return center;
+    } on Exception {
+      currentLocation = null;
+      return null;
+    }
+  }
+
+  void getNearbyPlaces(LatLng center)async{
+    setState(() {
+      this.isLoading = true;
+      this.errorMsg = null;
+    });
+    final location = Location();
+    final result = await _places.searchNearbyWithRadius(location, 2500);
+    
+  }
+
 
 }
