@@ -132,8 +132,24 @@ class HomeState extends State<HomeScreen>{
     });
     final location = Location();
     final result = await _places.searchNearbyWithRadius(location, 2500);
-    
+    setState(() {
+      this.isLoading = false;
+      if(result.status == "OK") {
+        this.places = result.results;
+        result.results.forEach((f) {
+          print(f.name);
+        });
+      }
+      else{
+        this.errorMsg = result.errorMessage;
+      }
+    });
   }
 
+  void onError(PlacesAutocompleteResult response) {
+    print("error");
+  }
+
+  
 
 }
