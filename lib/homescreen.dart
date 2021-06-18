@@ -1,6 +1,7 @@
-import 'dart:html';
+//import 'dart:html';
 import 'dart:ui';
 import 'package:co_win/Second.dart';
+import 'package:co_win/place_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -146,10 +147,94 @@ class HomeState extends State<HomeScreen>{
     });
   }
 
-  void onError(PlacesAutocompleteResult response) {
+  void onError(PlacesAutocompleteResponse response) {
     print("error");
   }
 
-  
+  Future<void> _handlePressButton() async{
+    try{
+      final center = await getUserLocation();
+      Prediction p = await PlacesAutocomplete.show(
+          context: context,
+          strictbounds: center == null ? false : true,
+          apiKey: apikey,
+      onError: onError,
+      mode: Mode.fullscreen,
+      language: "en",
+      location: center == null ? null : Location(),
+      radius: center == null ? null : 10000);
+      showDetailPlace(p.placeId);
+    }catch(e){
+      return;
+    }
+  }
+
+  Future<Null> showDetailPlace(String placeId) async{
+    if(placeId != null){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => PlaceDetail(placeId)),
+      );
+    }
+  }
+
+  ListView buildPlacesList() {
+    final placesWidget = places.map((f) {
+      List<Widget> list = [
+        Padding(
+            padding: EdgeInsets.only(bottom: 4.0),
+          child: Text(
+            f.formattedAddress,
+            style: Theme.of(context).textTheme.subtitle,
+          ),
+        ),
+      ];
+      if(f.formattedAddress != null) {
+        list.add(
+          Padding(padding: EdgeInsets.only(bottom: 2.0),
+          child: Text(f.formattedAddress,
+          style: Theme.of(context).textTheme.subtitle,),)
+        );
+      }
+      if(f.vicinity != null){
+        list.add(Padding(
+          padding: EdgeInsets.only(bottom: 2.0),
+          child: Text(
+            f.vicinity,
+            style: Theme.of(context).textTheme.body1,
+          ),
+        ));
+      }
+      if(f.types?.first != null){
+        list.add(Padding(
+          padding: EdgeInsets.only(bottom: 2.0),
+          child: Text(
+            f.types.first,
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ));
+      }
+      return Padding(padding: EdgeInsets.only(top: 4.0,bottom: 4.0,left: 8.0,right: 8.0),
+        child: Card(
+          child: InkWell(
+            onTap: (){
+              showDetailPlace(f.placeId);
+            },
+            highlightColor: Colors.lightBlueAccent,
+            splashColor: Colors.red,
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: list,
+              ),
+            ),
+          ),
+        ),
+      );
+    }).toList();
+    return ListView(shrinkWrap: true, children: placesWidget);
+  }
 
 }
