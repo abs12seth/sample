@@ -1,16 +1,12 @@
-//import 'dart:html';
-import 'dart:ui';
+import 'dart:async';
 import 'package:co_win/Second.dart';
-import 'package:co_win/place_detail.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
-import 'package:location/location.dart' as LocationManager;
-import 'package:intl/intl.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart' as LocationManager;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'place_detail.dart';
 
 const apikey = "AIzaSyDHoIRdbk8vfGlaHLkdUxh2XWGR8pMgrto";
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: apikey);
@@ -23,24 +19,15 @@ class HomeScreen extends StatefulWidget{
 }
 
 class HomeState extends State<HomeScreen>{
-  //LocationManager.LocationData currentLocation;
-  //LocationManager.Location loc = LocationManager.Location();
-  String address,date;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   GoogleMapController mapController;
-  Marker marker;
   bool isLoading = false;
   String errorMsg;
   List<PlacesSearchResult> places = [];
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUserLocation();
-  }
-
   void _onMapCreated(GoogleMapController controller){
     mapController = controller;
+    refresh();
     /*loc.onLocationChanged.listen((l) {
       mapController.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -54,8 +41,17 @@ class HomeState extends State<HomeScreen>{
 
   @override
   Widget build(BuildContext context) {
-    SecondState ss = new SecondState();
+    Widget expandedChild;
+    if(isLoading){
+      expandedChild = Center(child: CircularProgressIndicator(value: null));
+    } else if(errorMsg != null){
+      expandedChild = Center(child: Text(errorMsg),);
+    } else{
+      expandedChild = buildPlacesList();
+    }
+
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(title: Text("Main"),
       actions: <Widget>[
         isLoading ?
@@ -67,7 +63,7 @@ class HomeState extends State<HomeScreen>{
         ),
         IconButton(icon: Icon(Icons.search),
             onPressed: (){
-             // _handlePressButton();
+              _handlePressButton();
             }
         ),
       ],),
@@ -90,8 +86,16 @@ class HomeState extends State<HomeScreen>{
       body: Column(
         children: [
           Container(
-
+            child: SizedBox(
+              height: 200.0,
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                myLocationEnabled: true,
+                initialCameraPosition: const CameraPosition(target: LatLng(0.0, 0.0)),
+              ),
+            ),
           ),
+          Expanded(child: expandedChild)
         ],
         ),
     );
@@ -109,13 +113,14 @@ class HomeState extends State<HomeScreen>{
     final center = await getUserLocation();
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: center == null ? LatLng(0, 0) : center, zoom: 15.0)));
+    getNearbyPlaces(center);
   }
 
   Future<LatLng> getUserLocation() async{
-    var currentLocation = <String, double>{};
+    Map<String, dynamic> currentLocation;
     final location = LocationManager.Location();
     try{
-      currentLocation = (await location.getLocation()) as Map<String, double>;
+      currentLocation = await location.getLocation();
       final lat = currentLocation["latitude"];
       final lang = currentLocation["longitude"];
       final center = LatLng(lat, lang);
@@ -127,17 +132,24 @@ class HomeState extends State<HomeScreen>{
   }
 
   void getNearbyPlaces(LatLng center)async{
+    MarkerId marker;
     setState(() {
       this.isLoading = true;
       this.errorMsg = null;
     });
-    final location = Location();
+    final location = Location(lat: center.latitude,lng: center.longitude);
     final result = await _places.searchNearbyWithRadius(location, 2500);
     setState(() {
       this.isLoading = false;
       if(result.status == "OK") {
         this.places = result.results;
         result.results.forEach((f) {
+          final options = Marker(
+            markerId: marker,
+            position: LatLng(f.geometry.location.lat,f.geometry.location.lng),
+            infoWindow: InfoWindow(title: "${f.name}")
+          );
+          mapController.showMarkerInfoWindow(marker);
           print(f.name);
         });
       }
@@ -148,7 +160,9 @@ class HomeState extends State<HomeScreen>{
   }
 
   void onError(PlacesAutocompleteResponse response) {
-    print("error");
+    scaffoldKey.currentState.showSnackBar(
+      SnackBar(content: Text(response.errorMessage))
+    );
   }
 
   Future<void> _handlePressButton() async{
