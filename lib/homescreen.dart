@@ -117,12 +117,12 @@ class HomeState extends State<HomeScreen>{
   }
 
   Future<LatLng> getUserLocation() async{
-    Map<String, dynamic> currentLocation;
+    LocationManager.LocationData currentLocation;
     final location = LocationManager.Location();
     try{
       currentLocation = await location.getLocation();
-      final lat = currentLocation["latitude"];
-      final lang = currentLocation["longitude"];
+      final lat = currentLocation.latitude;
+      final lang = currentLocation.longitude;
       final center = LatLng(lat, lang);
       return center;
     } on Exception {
