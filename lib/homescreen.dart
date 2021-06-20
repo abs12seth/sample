@@ -175,7 +175,7 @@ class HomeState extends State<HomeScreen>{
       onError: onError,
       mode: Mode.fullscreen,
       language: "en",
-      location: center == null ? null : Location(),
+      location: center == null ? null : Location(lat: center.latitude,lng: center.longitude),
       radius: center == null ? null : 10000);
       showDetailPlace(p.placeId);
     }catch(e){
