@@ -24,6 +24,8 @@ class HomeState extends State<HomeScreen>{
   bool isLoading = false;
   String errorMsg;
   List<PlacesSearchResult> places = [];
+  Map<MarkerId, Marker> markers = <MarkerId,Marker>{};
+  int markerIdcounter = 1;
 
   void _onMapCreated(GoogleMapController controller){
     mapController = controller;
@@ -45,6 +47,7 @@ class HomeState extends State<HomeScreen>{
     if(isLoading){
       expandedChild = Center(child: CircularProgressIndicator(value: null));
     } else if(errorMsg != null){
+      print(errorMsg);
       expandedChild = Center(child: Text(errorMsg),);
     } else{
       expandedChild = buildPlacesList();
@@ -92,6 +95,7 @@ class HomeState extends State<HomeScreen>{
                 onMapCreated: _onMapCreated,
                 myLocationEnabled: true,
                 initialCameraPosition: const CameraPosition(target: LatLng(0.0, 0.0)),
+                markers: Set<Marker>.of(markers.values),
               ),
             ),
           ),
@@ -132,7 +136,6 @@ class HomeState extends State<HomeScreen>{
   }
 
   void getNearbyPlaces(LatLng center)async{
-    MarkerId marker;
     setState(() {
       this.isLoading = true;
       this.errorMsg = null;
@@ -141,19 +144,26 @@ class HomeState extends State<HomeScreen>{
     final result = await _places.searchNearbyWithRadius(location, 2500);
     setState(() {
       this.isLoading = false;
+      print(result.status);
       if(result.status == "OK") {
         this.places = result.results;
         result.results.forEach((f) {
-          final options = Marker(
-            markerId: marker,
+          final String markerIdval = 'marker_Id$markerIdcounter';
+          markerIdcounter++;
+          final MarkerId markerId = MarkerId(markerIdval);
+          final Marker marker = Marker(
+            markerId: markerId,
             position: LatLng(f.geometry.location.lat,f.geometry.location.lng),
             infoWindow: InfoWindow(title: "${f.name}")
           );
-          mapController.showMarkerInfoWindow(marker);
+          setState(() {
+            markers[markerId] = marker;
+          });
           print(f.name);
         });
       }
       else{
+        print("error");
         this.errorMsg = result.errorMessage;
       }
     });
