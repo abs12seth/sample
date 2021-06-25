@@ -12,7 +12,7 @@ class User {
       this.password,});
   User.fromMap(dynamic obj){
     this.name = obj['name'];
-    this.phone_no = obj['mobile'];
+    this.phone_no = obj['phone_no'];
     this.email = obj['email'];
     this.password = obj['password'];
   }

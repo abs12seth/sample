@@ -39,6 +39,7 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
     // TODO: implement build
     return Scaffold(
         backgroundColor: Color.fromRGBO(197, 234, 225, 40),
+
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -171,6 +172,11 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
                     ],
                   ),
                 ),
+              ),
+              TextButton(onPressed: (){
+                 Navigator.pushNamed(context, '/admin');
+              },
+                  child: Text("Hospital Login??"),
               ),
             ],
           ),

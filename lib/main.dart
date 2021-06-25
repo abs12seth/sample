@@ -1,3 +1,4 @@
+import 'package:co_win/Admin/admin_login.dart';
 import 'package:co_win/Second.dart';
 import 'package:co_win/createaccount.dart';
 import 'package:co_win/homescreen.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         '/second': (context) => SecondScreen(),
         '/create': (context) => CreateAccount(),
         '/main': (context) => HomeScreen(),
+        '/admin': (context) => AdminLogin(),
       },
     );
   }

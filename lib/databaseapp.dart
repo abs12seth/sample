@@ -1,3 +1,4 @@
+import 'package:co_win/Admin/hospitals.dart';
 import 'package:co_win/database.dart';
 import 'package:co_win/users.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,6 +30,12 @@ class LoginApp{
     }
   }
 
+  Future<void> insertHospital(Hospital hospital) async{
+    var db = await log.db;
+    int res = await db.insert('hospitals', hospital.toMap());
+    print("inserted hospital");
+  }
+
   Future<int> deleteUser(User user) async {
     var db = await log.db;
     int res = await db.delete('users');
@@ -55,6 +62,16 @@ class LoginApp{
     print(res);
     if(res.length > 0) {
       return new User.fromMap(res.first);
+    }
+    return null;
+  }
+
+  Future<Hospital> getLoginHospital(String id,String password) async{
+    var db = await log.db;
+    var res = await db.rawQuery("SELECT * FROM hospitals WHERE hospital_id = '$id' and password = '$password'");
+    print(res);
+    if(res.length > 0) {
+      return new Hospital.fromMap(res.first);
     }
     return null;
   }
