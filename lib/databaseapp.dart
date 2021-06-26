@@ -10,7 +10,7 @@ class LoginApp{
   Future<bool> insertUser(User user) async {
     var db = await log.db;
     bool ret = false;
-    if(db == null){
+    if(db == null) {
       print("it is null");
     }
     else {
@@ -76,6 +76,7 @@ class LoginApp{
     return null;
   }
 
+
   Future<List<User>> getAlluser() async {
     var db = await log.db;
     /*final List<Map<String, dynamic>> maps = await db.query('users');
@@ -87,6 +88,14 @@ class LoginApp{
     });*/
     var res = await db.query('users');
     List<User> list = res.isNotEmpty ? res.map((c) => User.fromMap(c)).toList() : null;
+    print(list[0]);
+    return list;
+  }
+
+  Future<List<Hospital>> getAllHospital() async {
+    var db = await log.db;
+    var res = await db.query('hospitals');
+    List<Hospital> list = res.isNotEmpty ? res.map((c) => Hospital.fromMap(c)).toList() : null;
     print(list);
     return list;
   }

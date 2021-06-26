@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget{
 
 class HomeState extends State<HomeScreen>{
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  GoogleMapController mapController;
+  /*GoogleMapController mapController;
   bool isLoading = false;
   String errorMsg;
   List<PlacesSearchResult> places = [];
@@ -39,24 +39,24 @@ class HomeState extends State<HomeScreen>{
       ),
       );
     });*/
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     Widget expandedChild;
-    if(isLoading){
+    /*if(isLoading){
       expandedChild = Center(child: CircularProgressIndicator(value: null));
     } else if(errorMsg != null){
       print(errorMsg);
       expandedChild = Center(child: Text(errorMsg),);
     } else{
       expandedChild = buildPlacesList();
-    }
+    }*/
 
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(title: Text("Main"),
-      actions: <Widget>[
+      /*actions: <Widget>[
         isLoading ?
             IconButton(icon: Icon(Icons.timer), onPressed: (){},)
             : IconButton(icon: Icon(Icons.refresh),
@@ -69,7 +69,7 @@ class HomeState extends State<HomeScreen>{
               _handlePressButton();
             }
         ),
-      ],),
+      ],*/),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -86,7 +86,7 @@ class HomeState extends State<HomeScreen>{
           ],
         ),
       ),
-      body: Column(
+      /*body: Column(
         children: [
           Container(
             child: SizedBox(
@@ -101,7 +101,7 @@ class HomeState extends State<HomeScreen>{
           ),
           Expanded(child: expandedChild)
         ],
-        ),
+        ),*/
     );
   }
 
@@ -113,7 +113,7 @@ class HomeState extends State<HomeScreen>{
     Navigator.pushReplacementNamed(context, '/second');
   }
 
-  void refresh() async{
+  /*void refresh() async{
     final center = await getUserLocation();
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: center == null ? LatLng(0, 0) : center, zoom: 15.0)));
@@ -259,6 +259,6 @@ class HomeState extends State<HomeScreen>{
       );
     }).toList();
     return ListView(shrinkWrap: true, children: placesWidget);
-  }
+  }*/
 
 }
