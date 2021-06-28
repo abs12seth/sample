@@ -126,7 +126,7 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
                 width: 200,
                 decoration: BoxDecoration(
                   color: Color.fromRGBO(61, 169, 142, 50),
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: FlatButton(
                   onPressed: () {

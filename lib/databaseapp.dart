@@ -88,7 +88,7 @@ class LoginApp{
     });*/
     var res = await db.query('users');
     List<User> list = res.isNotEmpty ? res.map((c) => User.fromMap(c)).toList() : null;
-    print(list[0]);
+    print(list[0].name);
     return list;
   }
 

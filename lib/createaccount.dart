@@ -218,7 +218,8 @@ class CreateState extends State<CreateAccount>{
     user.password = password.text;
     //var c = login.deleteUser(user);
     bool a = await login.insertUser(user);
-    var l = login.getAlluser();
+    var l = await login.getAlluser();
+    print(l);
     if(a){
       showDialog(
           context: context,

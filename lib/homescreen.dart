@@ -1,5 +1,9 @@
 import 'dart:async';
 import 'package:co_win/Second.dart';
+import 'package:co_win/database.dart';
+import 'package:co_win/databaseapp.dart';
+import 'package:co_win/main.dart';
+import 'package:co_win/users.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +12,8 @@ import 'package:location/location.dart' as LocationManager;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'place_detail.dart';
 
-const apikey = "AIzaSyDHoIRdbk8vfGlaHLkdUxh2XWGR8pMgrto";
-GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: apikey);
+//const apikey = "AIzaSyDHoIRdbk8vfGlaHLkdUxh2XWGR8pMgrto";
+//GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: apikey);
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -19,7 +23,12 @@ class HomeScreen extends StatefulWidget{
 }
 
 class HomeState extends State<HomeScreen>{
+
+  LoginApp loginApp = new LoginApp();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  Future<List<User>> lisp;
+
+
   /*GoogleMapController mapController;
   bool isLoading = false;
   String errorMsg;
@@ -42,7 +51,27 @@ class HomeState extends State<HomeScreen>{
   }*/
 
   @override
+  void initState() {
+    super.initState();
+    lisp = main();
+  }
+
+  Future<List<User>> main() async{
+    print("Retrieving list");
+    var list = await loginApp.getAlluser();
+    return list;
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    //print(lisp);
+    //print("w");
+    //Future.delayed(
+      //Duration(seconds: 3),() {
+      //print(fs.list);
+    //}
+   // );
     Widget expandedChild;
     /*if(isLoading){
       expandedChild = Center(child: CircularProgressIndicator(value: null));
@@ -86,6 +115,39 @@ class HomeState extends State<HomeScreen>{
           ],
         ),
       ),
+        body: FutureBuilder(
+          initialData: false,
+          future: lisp,
+          builder: (context,snapshot){
+            if(snapshot.hasData){
+              print("Step 2");
+              print(snapshot.data);
+              if(snapshot.data != false){
+                List<User> users = snapshot.data;
+                return ListView.builder(padding: EdgeInsets.symmetric(vertical: 8.0),
+                    itemCount: users.length,
+                    itemBuilder: (context,position){
+                      return ListTile(title: Text(users[position].name),);
+                    });
+
+              }
+              return Center(child: Text("Retrieving Data...."),);
+
+            }
+            else{
+              return Text("Retrieving List");
+            }
+          },
+        ),
+        /*body: ListView.builder(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          itemCount: fs.liso.length,
+          itemBuilder: (context,position){
+            return ListTile(
+              title: Text(fs.liso[position].name),
+            );
+          },
+        )*/
       /*body: Column(
         children: [
           Container(
@@ -112,6 +174,9 @@ class HomeState extends State<HomeScreen>{
 
     Navigator.pushReplacementNamed(context, '/second');
   }
+
+
+
 
   /*void refresh() async{
     final center = await getUserLocation();
@@ -260,5 +325,7 @@ class HomeState extends State<HomeScreen>{
     }).toList();
     return ListView(shrinkWrap: true, children: placesWidget);
   }*/
+
+
 
 }

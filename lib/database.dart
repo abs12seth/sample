@@ -42,7 +42,7 @@ class Login{
 
     var ourDb = await openDatabase(path,onCreate: (db,version){db.execute(
         "CREATE TABLE users(name TEXT, phone_no TEXT, email TEXT, password TEXT)");
-    db.execute("CREATE TABLE hospitals(name TEXT, phone_no TEXT, email TEXT, password TEXT, hospital_id TEXT,beds INTEGER,doctors INTEGERS)");
+    db.execute("CREATE TABLE hospitals(name TEXT, phone_no TEXT, email TEXT, password TEXT, hospital_id TEXT,beds INTEGER,doctors INTEGERS,city TEXT)");
     },
       version: 1,
     );

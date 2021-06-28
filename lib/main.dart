@@ -27,16 +27,32 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class FirstScreen extends StatelessWidget {
+class FirstScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState(){
+    return FirstState();
+  }
+}
+
+class FirstState extends State<FirstScreen> {
   BuildContext _buildContext;
   @override
-  Widget build(BuildContext context) {
-    _buildContext = context;
+  void initState() {
+    super.initState();
     Future.delayed(
       Duration(seconds: 3), (){
       next();
     },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    _buildContext = context;
+
+
+
     return Container(
       alignment: Alignment.center,
       color: Color.fromRGBO(197, 234, 225, 40),
@@ -71,13 +87,18 @@ class FirstScreen extends StatelessWidget {
           ),
 
           /*ElevatedButton(
-              onPressed: () {
-                var res = next();
+              onPressed: () async{
+                await getList();
+                liso = list;
+                print(liso);
+                await next();
+                print(liso);
               },
               child: Text("Continue >")),*/
         ],
       ),
     );
+
   }
   Future next() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -88,4 +109,5 @@ class FirstScreen extends StatelessWidget {
       Navigator.pushReplacementNamed(_buildContext, '/second');
     }
   }
+
 }

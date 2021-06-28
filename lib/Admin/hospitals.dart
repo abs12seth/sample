@@ -6,6 +6,7 @@ class Hospital{
   String hospital_id;
   int beds;
   int doctors;
+  String city;
 
   Hospital(
   {
@@ -16,6 +17,7 @@ class Hospital{
     this.hospital_id,
     this.beds,
     this.doctors,
+    this.city,
   });
 
   Hospital.fromMap(dynamic obj) {
@@ -26,6 +28,7 @@ class Hospital{
     this.hospital_id = obj['hospital_id'];
     this.beds = obj['beds'];
     this.doctors = obj['doctors'];
+    this.city = obj['city'];
   }
 
   Map<String, dynamic> toMap() {
@@ -37,12 +40,13 @@ class Hospital{
       'hospital_id': hospital_id,
       'beds': beds,
       'doctors': doctors,
+      'city': city,
     };
   }
 
   @override
   String toString(){
-    return 'Hospital{name: $name,phone_no: $phone_no,email: $email, password: $password, hospital_id: $hospital_id, beds: $beds, doctors: $doctors}';
+    return 'Hospital{name: $name,phone_no: $phone_no,email: $email, password: $password, hospital_id: $hospital_id, beds: $beds, doctors: $doctors, city: $city}';
   }
 
 }
