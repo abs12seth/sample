@@ -50,6 +50,8 @@ flutter:
       fonts:
         - asset: assets\Fonts\Rubik-Italic-VariableFont_wght.ttf
         - asset: assets\Fonts\Rubik-VariableFont_wght.ttf
+        - asset: images/kd.jpg
+        - asset: images/hos.jpg
 
 
   # The following line ensures that the Material Icons font is

@@ -38,7 +38,7 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-        backgroundColor: Color.fromRGBO(197, 234, 225, 40),
+        backgroundColor: const Color(0xffE8EBE9),
 
         body: SingleChildScrollView(
           child: Column(
@@ -46,7 +46,11 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
               Padding(
                 padding: const EdgeInsets.only(top: 60.0),
                 child: Center(
-                  child: Container(
+                  child: CircleAvatar(
+                    radius: 90.0,
+                    backgroundImage: AssetImage('images/hos.jpg'),
+                  )
+                  /*child: Container(
                       width: 200,
                       height: 150,
                       decoration: BoxDecoration(
@@ -57,7 +61,7 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
                           "Sample",
                           style: TextStyle(fontSize: 20.0, color: Colors.white),
                         ),
-                      )),
+                      ))*/,
                 ),
               ),
               Form(
@@ -125,7 +129,7 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
                 height: 50,
                 width: 200,
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(61, 169, 142, 50),
+                  color: const Color(0xff135E37),
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: FlatButton(
@@ -140,9 +144,9 @@ class SecondState extends State<SecondScreen> implements LoginCallBack {
                     }
                   },
                   child: Text(
-                    'LOGIN',
+                    'Login',
                     style: TextStyle(
-                        color: Color.fromRGBO(0, 43, 43, 100),
+                        color: const Color(0xffE8EBE9),
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Rubik'),

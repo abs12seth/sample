@@ -55,7 +55,7 @@ class FirstState extends State<FirstScreen> {
 
     return Container(
       alignment: Alignment.center,
-      color: Color.fromRGBO(197, 234, 225, 40),
+      color: const Color(0xffE8EBE9),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,13 +71,13 @@ class FirstState extends State<FirstScreen> {
                   Text('Hack',
                       style: TextStyle(
                           fontSize: 36.0,
-                          color: Colors.white,
+                          color: const Color(0xffB8C2BC),
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Rubik')),
                   Text('Covid',
                       style: TextStyle(
                           fontSize: 36.0,
-                          color: Color.fromRGBO(0, 43, 43, 100),
+                          color: const Color(0xff135E37),
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Rubik')),
                 ],

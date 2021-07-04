@@ -27,37 +27,33 @@ class CreateState extends State<CreateAccount>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      backgroundColor: Color.fromRGBO(197, 234, 225, 50),
+      backgroundColor: const Color(0xff135E37),
       body: SingleChildScrollView(
         child: Form(
           key: _formkey,
-          autovalidateMode: AutovalidateMode.always,
+          autovalidateMode: AutovalidateMode.onUserInteraction  ,
         child: Column(
           children: <Widget>[
             Padding(padding: const EdgeInsets.only(top: 60.0),
               child: Center(
-                child: Container(
-                    width: 200,
-                    height: 150,
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(61, 169, 142, 50),
-                        borderRadius: BorderRadius.circular(100.0)
-                    ),
-
+                child: CircleAvatar(
+                  radius: 100.0,
+                  backgroundImage: AssetImage('images/hos.jpg'),
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.only(left: 15,right: 15, top: 10.0,bottom: 0.0),
+            Padding(padding: EdgeInsets.only(left: 0.0,right: 0.0, top: 10.0,bottom: 0),
               child: Center(
                 child: Container(
+
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40.0),
+                    color: const Color(0xffE8EBE9),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Padding(padding: EdgeInsets.only(left: 15,right: 15, top: 10,bottom: 0.0),
+                      Padding(padding: EdgeInsets.only(left: 15,right: 15, top: 20,bottom: 0.0),
                         child: TextFormField(
                           validator: (value){
                             if(value == null || value.isEmpty){
@@ -167,36 +163,36 @@ class CreateState extends State<CreateAccount>{
                           ),
                         ),
                       ),
-
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 20.0),
+                        height: 50,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff135E37),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: FlatButton(
+                          onPressed: () {
+                            if(_formkey.currentState.validate()){
+                              print("Validated");
+                              check();
+                            }
+                            else{
+                              print("Not validated");
+                            }
+                            //print(user.name);
+                            //print(login.insertUser(user));
+                            //print(login.getAlluser());
+                          },
+                          child: Text('Register',style: TextStyle(color: const Color(0xffE8EBE9),fontWeight: FontWeight.bold,fontFamily: 'Rubik',fontSize: 18),),
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20.0),
-              height: 50,
-              width: 200,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(61, 169, 142, 50),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: FlatButton(
-                onPressed: () {
-                  if(_formkey.currentState.validate()){
-                    print("Validated");
-                    check();
-                  }
-                  else{
-                    print("Not validated");
-                  }
-                  //print(user.name);
-                  //print(login.insertUser(user));
-                  //print(login.getAlluser());
-                },
-                child: Text('Register'),
-              ),
-            ),
+
           ],
         ),
         ),

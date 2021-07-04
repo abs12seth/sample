@@ -84,7 +84,9 @@ class HomeState extends State<HomeScreen>{
 
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: const Color(0xffB8C2BC),
       appBar: AppBar(title: Text("Main"),
+      backgroundColor: const Color(0xff135E37),
       /*actions: <Widget>[
         isLoading ?
             IconButton(icon: Icon(Icons.timer), onPressed: (){},)
@@ -124,10 +126,11 @@ class HomeState extends State<HomeScreen>{
               print(snapshot.data);
               if(snapshot.data != false){
                 List<User> users = snapshot.data;
-                return ListView.builder(padding: EdgeInsets.symmetric(vertical: 8.0),
+                return ListView.builder(
                     itemCount: users.length,
                     itemBuilder: (context,position){
-                      return ListTile(title: Text(users[position].name),);
+                      return Padding(padding: EdgeInsets.only(top: 4.0),
+                      child:ListTile(title: Text(users[position].name),tileColor: const Color(0xffE8EBE9),) ,);
                     });
 
               }

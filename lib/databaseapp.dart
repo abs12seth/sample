@@ -36,6 +36,7 @@ class LoginApp{
     print("inserted hospital");
   }
 
+
   Future<int> deleteUser(User user) async {
     var db = await log.db;
     int res = await db.delete('users');
